@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
+@import 'tailwindcss';
+
+/* ── Palette pulled from the portrait ── */
+:root {
+  --navy:      #0F2244;   /* deep navy, from the shirt */
+  --navy-mid:  #1A3461;   /* mid navy for sections */
+  --navy-faint:#EEF1F8;   /* very light navy tint */
+  --gold:      #C09127;   /* warm gold, not orange */
+  --gold-mid:  #D4A843;   /* slightly lighter gold for text */
+  --gold-faint:#F7EED4;   /* faint gold tint */
+  --ink:       #0A1628;   /* near-black for headlines */
+  --body:      #3D4E63;   /* comfortable body text */
+  --muted:     #7A8FA6;   /* captions, labels */
+  --border:    #DDE3EE;   /* hairlines */
+  --bg:        #F8F7F4;   /* warm off-white page ground */
+  --bg-mid:    #EFF0EC;   /* slightly cooler section alt */
+  --white:     #FFFFFF;
+}
+
+html, body, #root {
+  height: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #F5F3EE;
+  color: #0D1B2A;
+  scroll-behavior: smooth;
+}
+* { box-sizing: border-box; }
+p { max-width: 70ch; line-height: 1.7; }
+a, button { -webkit-tap-highlight-color: transparent; }
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #C09127; border-radius: 2px; }
+
+/* ── Keyframes — deliberate, no bounce ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes drawerIn  { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes overlayIn { from { opacity: 0; } to   { opacity: 1; } }
+@keyframes drawPath  { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+@keyframes tickerSlide {
+  0%  { transform: translateY(0);    opacity: 1; }
+  40% { transform: translateY(-110%); opacity: 0; }
+  41% { transform: translateY(110%);  opacity: 0; }
+  100%{ transform: translateY(0);    opacity: 1; }
+}
+@keyframes drawLine {
+  from { transform: scaleX(0); transform-origin: left; }
+  to   { transform: scaleX(1); transform-origin: left; }
+}
+@keyframes chipIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes badgePop {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes photoIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes whatsappIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Animation classes ── */
+.animate-fade-up    { animation: fadeUp 0.45s ease-out both; }
+.animate-fade-up-d1 { animation: fadeUp 0.45s 0.10s ease-out both; }
+.animate-fade-up-d2 { animation: fadeUp 0.45s 0.20s ease-out both; }
+.animate-fade-up-d3 { animation: fadeUp 0.45s 0.30s ease-out both; }
+.animate-fade-in    { animation: fadeIn 0.4s ease-out both; }
+.animate-drawer-in  { animation: drawerIn 0.35s cubic-bezier(0.33,1,0.68,1) both; }
+.animate-overlay-in { animation: overlayIn 0.28s ease both; }
+.hero-photo { transform-origin: center; animation: photoIn 0.5s 0.12s ease-out both; }
+
+/* Gold shimmer on headline */
+.gold-shimmer {
+  background: linear-gradient(90deg, var(--gold) 0%, #E8C160 45%, var(--gold) 70%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Chart path draw */
+.chart-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawPath 0.5s ease-out 0.2s forwards;
+}
+.chart-path-2 {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawPath 0.5s ease-out 0.3s forwards;
+}
+
+/* Hover lift — gentle */
+.hover-lift {
+  transition: transform 0.36s ease-out,
+              box-shadow 0.36s ease-out;
+}
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 38px rgba(15,34,68,0.15);
+}
+.card-hover {
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.36s ease-out,
+              transform 0.36s ease-out,
+              box-shadow 0.36s ease-out;
+}
+.card-hover::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.36s ease-out;
+}
+.card-hover:hover {
+  border-color: var(--gold) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(15,34,68,0.14);
+}
+.card-hover:hover::before { transform: scaleX(1); }
+
+/* Chip hover */
+.chip-hover {
+  transition: background 0.36s ease-out, border-color 0.36s ease-out;
+  cursor: default;
+}
+.chip-hover:hover {
+  border-color: rgba(192,145,39,0.50) !important;
+  background: rgba(192,145,39,0.10) !important;
+  color: #C09127 !important;
+}
+.tag-pill { transition: border-color 0.36s ease-out, color 0.36s ease-out; }
+.tag-pill:hover { border-color: var(--gold) !important; color: var(--gold) !important; }
+
+/* Gold name shimmer */
+.gold-text-shimmer {
+  background: linear-gradient(90deg, #C09127 0%, #E8C160 38%, #F5D78A 50%, #E8C160 62%, #C09127 100%);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated rule line */
+.draw-line {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: #C09127;
+  animation: drawLine 0.45s 0.15s ease-out both;
+}
+
+/* CTA button shimmer on hover */
+.btn-gold {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.36s ease-out, box-shadow 0.36s ease-out;
+}
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(192,145,39,0.45); }
+.interactive-button {
+  transition: transform 0.36s ease-out, box-shadow 0.36s ease-out, background-color 0.36s ease-out;
+}
+.interactive-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(11,29,58,0.18);
+}
+.interactive-button:active { transform: translateY(1px); }
+
+/* Navigation underline */
+.nav-link {
+  transition: color 0.36s ease-out;
+}
+.nav-link::after,
+.footer-nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.36s ease-out;
+}
+.nav-link:hover::after,
+.nav-link:focus-visible::after,
+.nav-link.is-active::after,
+.footer-nav-link:hover::after,
+.footer-nav-link:focus-visible::after { transform: scaleX(1); }
+
+/* Contact links */
+.contact-card {
+  box-shadow: 0 12px 32px rgba(15,34,68,0.08);
+}
+.contact-row {
+  transition: background-color 0.36s ease-out;
+}
+.contact-row:hover,
+.contact-row:focus-visible { background: var(--gold-faint); }
+.contact-link-text {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  transition: color 0.36s ease-out;
+}
+.contact-link-text::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.36s ease-out;
+}
+.contact-row:hover .contact-link-text,
+.contact-row:focus-visible .contact-link-text { color: var(--gold) !important; }
+.contact-row:hover .contact-link-text::after,
+.contact-row:focus-visible .contact-link-text::after { transform: scaleX(1); }
+.contact-arrow {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.36s ease-out, transform 0.36s ease-out;
+}
+.contact-row:hover .contact-arrow,
+.contact-row:focus-visible .contact-arrow {
+  opacity: 1;
+  transform: translateX(3px);
+}
+.reveal-item {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.45s ease-out, transform 0.45s ease-out, background-color 0.36s ease-out;
+}
+.reveal.is-visible .reveal-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Compact footer social button */
+.footer-linkedin {
+  width: 36px;
+  height: 36px;
+  color: var(--gold);
+  border-color: var(--gold);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.footer-linkedin:hover {
+  color: var(--navy);
+  background: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(192,145,39,0.22);
+}
+.footer-linkedin:active { transform: translateY(1px); }
+.footer-nav-link {
+  position: relative;
+  padding-bottom: 3px;
+  transition: color 0.36s ease-out;
+}
+.footer-nav-link:hover { color: var(--gold-mid) !important; }
+.whatsapp-button {
+  animation: whatsappIn 0.5s 0.25s ease-out both;
+  transition: transform 0.36s ease-out, box-shadow 0.36s ease-out;
+}
+.whatsapp-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(37,211,102,0.45) !important;
+}
+.whatsapp-button:active { transform: translateY(1px); }
+
+/* Mobile hero stack */
+@media (max-width: 767px) {
+  .hero-grid { flex-direction: column !important; }
+  .hero-left { max-width: 100% !important; padding-right: 0 !important; padding-top: 100px !important; padding-bottom: 32px !important; }
+  .hero-right { width: 100% !important; height: 60vw !important; min-height: 280px; max-height: 380px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal,
+  .reveal-item,
+  .hero-photo {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
